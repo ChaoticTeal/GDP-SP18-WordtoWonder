@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     bool isOnGround;
     /// <summary>
+    /// Is the player trying to interact with a thing?
+    /// </summary>
+    bool shouldInteract;
+    /// <summary>
     /// Should the player jump?
     /// </summary>
     bool shouldJump;
@@ -43,11 +47,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float groundDetectRadius = 0.25f;
     /// <summary>
+    /// Radius of interaction
+    /// </summary>
+    [Tooltip("Radius of interaction.")]
+    [SerializeField]
+    float interactionRangeRadius = .5f;
+    /// <summary>
     /// Movement speed
     /// </summary>
     [Tooltip ("Movement speed.")]
     [SerializeField]
     float moveSpeed = 5.0f;
+    /// <summary>
+    /// Interactive layer
+    /// </summary>
+    [Tooltip("Interactive layer.")]
+    [SerializeField]
+    LayerMask interactible;
     /// <summary>
     /// Ground layer
     /// </summary>
@@ -60,6 +76,12 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Ground detection point.")]
     [SerializeField]
     Transform groundDetectPoint;
+    /// <summary>
+    /// Center of interaction circle
+    /// </summary>
+    [Tooltip("Center of interaction circle.")]
+    [SerializeField]
+    Transform interactPoint;
     /// <summary>
     /// Strength of jump
     /// </summary>
@@ -81,12 +103,8 @@ public class PlayerMovement : MonoBehaviour
     {
         GetJumpInput();
         GetMoveInput();
+        GetInteractInput();
         UpdateIsOnGround();
-    }
-
-    private void GetMoveInput()
-    {
-        horizontalInput = Input.GetAxis("Horizontal");
     }
 
     private void FixedUpdate()
@@ -95,6 +113,53 @@ public class PlayerMovement : MonoBehaviour
         {
             Move();
             Jump();
+        }
+        else
+            GetText();
+        Interact();
+    }
+
+    // Get text if it's available
+    private void GetText()
+    {
+        if(shouldJump)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(interactPoint.position, interactionRangeRadius, interactible);
+            if (colliders.Length > 0)
+                foreach (Collider2D c in colliders)
+                {
+                    if (c.gameObject.GetComponent<NPCInteraction>() != null)
+                    {
+                        if(!c.gameObject.GetComponent<NPCInteraction>().TextCollected)
+                        {
+                            c.gameObject.GetComponent<NPCInteraction>().puzzleText.TextEffect();
+                        }
+                    }
+                }
+        }
+    }
+
+    // Check interaction input
+    private void GetInteractInput()
+    {
+        shouldInteract = Input.GetButtonDown("Interact");
+    }
+
+    // Interact
+    void Interact()
+    {
+        if(shouldInteract)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(interactPoint.position, interactionRangeRadius, interactible);
+            if (colliders.Length > 0)
+                foreach (Collider2D c in colliders)
+                {
+                    if (c.gameObject.GetComponent<NPCInteraction>() != null)
+                    {
+                        c.gameObject.GetComponent<NPCInteraction>().Interact();
+                        canControl = !canControl;
+                    }
+                }
         }
     }
 
@@ -116,6 +181,12 @@ public class PlayerMovement : MonoBehaviour
             isOnGround = false;
             shouldJump = false;
         }
+    }
+
+    // Check movement input
+    private void GetMoveInput()
+    {
+        horizontalInput = Input.GetAxis("Horizontal");
     }
 
     // Player movement logic
