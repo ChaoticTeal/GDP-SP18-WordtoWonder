@@ -53,11 +53,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float interactionRangeRadius = .5f;
     /// <summary>
+    /// Strength of jump
+    /// </summary>
+    [Tooltip("Force added on jump.")]
+    [SerializeField]
+    float jumpStrength;
+    /// <summary>
     /// Movement speed
     /// </summary>
     [Tooltip ("Movement speed.")]
     [SerializeField]
     float moveSpeed = 5.0f;
+    /// <summary>
+    /// Inventory menu.
+    /// </summary>
+    [Tooltip("Inventory menu.")]
+    [SerializeField]
+    GameObject inventoryMenu;
     /// <summary>
     /// Interactive layer
     /// </summary>
@@ -82,12 +94,6 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Center of interaction circle.")]
     [SerializeField]
     Transform interactPoint;
-    /// <summary>
-    /// Strength of jump
-    /// </summary>
-    [Tooltip("Force added on jump.")]
-    [SerializeField]
-    float jumpStrength;
 
     // Use this for initialization
     void Start ()
