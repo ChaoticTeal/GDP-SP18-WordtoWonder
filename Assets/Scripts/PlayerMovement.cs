@@ -111,6 +111,9 @@ public class PlayerMovement : MonoBehaviour
         GetMoveInput();
         GetInteractInput();
         UpdateIsOnGround();
+        Interact();
+        if (!canControl)
+            GetText();
     }
 
     private void FixedUpdate()
@@ -120,9 +123,6 @@ public class PlayerMovement : MonoBehaviour
             Move();
             Jump();
         }
-        else
-            GetText();
-        Interact();
     }
 
     // Get text if it's available
