@@ -18,6 +18,9 @@ public class NPCInteraction : MonoBehaviour
     [Tooltip("UI canvas.")]
     [SerializeField]
     Canvas canvas;
+    [Tooltip("The puzzle-type text, if present.")]
+    [SerializeField]
+    public PuzzleText puzzleText;
     [Header("Puzzle elements")]
     [Tooltip("Type of word which works as a solution.\n0 for food.")]
     [SerializeField]
@@ -39,11 +42,6 @@ public class NPCInteraction : MonoBehaviour
     /// Position of the NPC in screen space
     /// </summary>
     Vector3 screenPosition;
-    /// <summary>
-    /// Puzzle-type text (if present).
-    /// </summary>
-    [SerializeField]
-    public PuzzleText puzzleText;
 
     // Properties
     /// <summary>
@@ -69,12 +67,27 @@ public class NPCInteraction : MonoBehaviour
     {
         get
         {
-            if (puzzleText.BaseText != "" && puzzleText.TextCollected == false)
+            if (dialogueText_Problem != "") //&& !PuzzleSolved)
+                return dialogueText_Problem;
+            else if (puzzleText.BaseText != "" && !TextCollected)
                 return string.Format(dialogueText_Puzzle, puzzleText.DisplayText);
             else
                 return dialogueText_NoPuzzle;
         }
     }
+    /// <summary>
+    /// Is there an unsolved puzzle?
+    /// </summary>
+    /*
+    public bool PuzzleSolved
+    {
+        get
+        {
+            if(dialogueText_Problem != "")
+                return 
+        }
+    }*/
+
 
 	// Use this for initialization
 	void Start () 
