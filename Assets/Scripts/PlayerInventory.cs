@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    // SerializeFields
-    [Tooltip("Inventory panel.")]
-    [SerializeField]
-    GameObject inventoryPanel;
+    
+
+
 
 
 	// Use this for initialization

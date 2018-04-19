@@ -18,9 +18,17 @@ public class NPCInteraction : MonoBehaviour
     [Tooltip("UI canvas.")]
     [SerializeField]
     Canvas canvas;
-    [Tooltip("Value of puzzle-type text (if present).")]
+    [Header("Puzzle elements")]
+    [Tooltip("Type of word which works as a solution.\n0 for food.")]
     [SerializeField]
-    string puzzleTextValue;
+    int solutionType;
+    [Tooltip("Index of 'best' solution with a unique response/reward.")]
+    [SerializeField]
+    int bestSolutionIndex;
+    [Tooltip("Problem text.")]
+    [SerializeField]
+    string dialogueText_Problem;
+
 
     // Private fields
     /// <summary>
@@ -34,7 +42,8 @@ public class NPCInteraction : MonoBehaviour
     /// <summary>
     /// Puzzle-type text (if present).
     /// </summary>
-    public PuzzleText puzzleText = null;
+    [SerializeField]
+    public PuzzleText puzzleText;
 
     // Properties
     /// <summary>
@@ -60,7 +69,7 @@ public class NPCInteraction : MonoBehaviour
     {
         get
         {
-            if (puzzleTextValue != "" && puzzleText.TextCollected == false)
+            if (puzzleText.BaseText != "" && puzzleText.TextCollected == false)
                 return string.Format(dialogueText_Puzzle, puzzleText.DisplayText);
             else
                 return dialogueText_NoPuzzle;
@@ -71,8 +80,6 @@ public class NPCInteraction : MonoBehaviour
 	void Start () 
 	{
         camera = FindObjectOfType<Camera>();
-        if (puzzleTextValue != "")
-            puzzleText = new PuzzleText(puzzleTextValue);
 	}
 	
 	// Update is called once per frame

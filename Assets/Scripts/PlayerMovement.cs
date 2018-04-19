@@ -23,13 +23,13 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     bool shouldJump;
     /// <summary>
-    /// Horizontal input check
-    /// </summary>
-    float horizontalInput;
-    /// <summary>
     /// Box collider 2D
     /// </summary>
     BoxCollider2D boxCol;
+    /// <summary>
+    /// Horizontal input check
+    /// </summary>
+    float horizontalInput;
     /// <summary>
     /// Rigidbody 2D
     /// </summary>
@@ -64,12 +64,9 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip ("Movement speed.")]
     [SerializeField]
     float moveSpeed = 5.0f;
-    /// <summary>
-    /// Inventory menu.
-    /// </summary>
     [Tooltip("Inventory menu.")]
     [SerializeField]
-    GameObject inventoryMenu;
+    InventoryMenu inventoryMenu;
     /// <summary>
     /// Interactive layer
     /// </summary>
@@ -139,6 +136,7 @@ public class PlayerMovement : MonoBehaviour
                         if(!c.gameObject.GetComponent<NPCInteraction>().TextCollected)
                         {
                             c.gameObject.GetComponent<NPCInteraction>().puzzleText.TextEffect();
+                            inventoryMenu.PlayerInventory.Add(c.gameObject.GetComponent<NPCInteraction>().puzzleText);
                         }
                     }
                 }

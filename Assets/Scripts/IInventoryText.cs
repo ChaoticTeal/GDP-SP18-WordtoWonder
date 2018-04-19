@@ -22,7 +22,7 @@ public interface IInventoryText
     /// <summary>
     /// The text to use for the word
     /// </summary>
-    string BaseText { get; set; }
+    string BaseText { get; }
 
     /// <summary>
     /// The action taken when the text is collected
