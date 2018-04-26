@@ -1,40 +1,25 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class PuzzleText : IInventoryText
+public class AbilityText : IInventoryText
 {
     // SerializeFields
     [Tooltip("Index of the text within its category.")]
     [SerializeField]
     int textIndex_UseProperty;
-    [Tooltip("Category of the text.\n0 for food.")]
+    [Tooltip("Category of the text.\n0 for glide.")]
     [SerializeField]
     int textType_UseProperty;
     [Tooltip("The actual text value.")]
     [SerializeField]
     string baseText_UseProperty;
-    [Tooltip("Description text.")]
-    [SerializeField]
-    string descriptionText_UseProperty;
-
-    public static event Action<int, int> OnCollected;
 
     public string DisplayText
     {
         get
         {
             return "<color=#" + ColorUtility.ToHtmlStringRGB(TextColor) + ">" + BaseText + "</color>";
-        }
-    }
-
-    public string DescriptionText
-    {
-        get
-        {
-            return descriptionText_UseProperty;
         }
     }
 
@@ -59,7 +44,7 @@ public class PuzzleText : IInventoryText
     {
         get
         {
-            return Color.blue;
+            return Color.green;
         }
     }
     public string BaseText

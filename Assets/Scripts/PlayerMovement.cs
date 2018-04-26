@@ -7,9 +7,17 @@ public class PlayerMovement : MonoBehaviour
 {
     // Private fields
     /// <summary>
+    /// The animator on the object
+    /// </summary>
+    Animator animator;
+    /// <summary>
     /// Does the player have control?
     /// </summary>
     bool canControl_UseProperty;
+    /// <summary>
+    /// Has the player unlocked the ability to glide?
+    /// </summary>
+    bool canGlide;
     /// <summary>
     /// Is the player on the ground?
     /// </summary>
@@ -91,6 +99,12 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Center of interaction circle.")]
     [SerializeField]
     Transform interactPoint;
+    [Tooltip("Gravity scale for gliding.")]
+    [SerializeField]
+    float glideGravity = .5f;
+    [Tooltip("Base gravity scale.")]
+    [SerializeField]
+    float baseGravityScale = 2.5f;
 
     public bool CanControl
     {
@@ -103,8 +117,10 @@ public class PlayerMovement : MonoBehaviour
     {
         jumpForce = new Vector2(0, jumpStrength);
         rigidbody2D = GetComponent<Rigidbody2D>();
+        rigidbody2D.gravityScale = baseGravityScale;
         boxCol = GetComponent<BoxCollider2D>();
         CanControl = true;
+        animator = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -153,6 +169,7 @@ public class PlayerMovement : MonoBehaviour
     private void GetInteractInput()
     {
         shouldInteract = Input.GetButtonDown("Interact");
+        Debug.Log("Should interact: " + shouldInteract);
     }
 
     // Interact
@@ -160,6 +177,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(shouldInteract)
         {
+            Debug.Log("Interact");
             Collider2D[] colliders = Physics2D.OverlapCircleAll(interactPoint.position, interactionRangeRadius, interactible);
             if (colliders.Length > 0)
                 foreach (Collider2D c in colliders)
@@ -176,7 +194,7 @@ public class PlayerMovement : MonoBehaviour
     // Take jump input
     private void GetJumpInput()
     {
-        if (Input.GetButtonDown("Jump") && isOnGround)
+        if (Input.GetButtonDown("Jump"))
             shouldJump = true;
         else
             shouldJump = false;
@@ -187,9 +205,23 @@ public class PlayerMovement : MonoBehaviour
     {
         if (shouldJump)
         {
-            rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
-            isOnGround = false;
-            shouldJump = false;
+            if (isOnGround)
+            {
+                rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
+                isOnGround = false;
+                shouldJump = false;
+            }
+            else //if(canGlide)
+            {
+                if (rigidbody2D.gravityScale > glideGravity)
+                {
+                    rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                    rigidbody2D.gravityScale = glideGravity;
+                }
+                else
+                    rigidbody2D.gravityScale = baseGravityScale;
+
+            }
         }
     }
 
@@ -203,6 +235,7 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         rigidbody2D.velocity = new Vector2(horizontalInput * moveSpeed, rigidbody2D.velocity.y);
+        animator.SetFloat("speed", Mathf.Abs(horizontalInput));
     }
 
     // Checks for ground below and updates the isOnGround variable accordingly
@@ -210,6 +243,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Collider2D[] groundObjects = Physics2D.OverlapCircleAll(groundDetectPoint.position, groundDetectRadius, whatCountsAsGround);
         isOnGround = groundObjects.Length > 0;
+        if (isOnGround)
+            rigidbody2D.gravityScale = baseGravityScale;
         boxCol.enabled = true;
     }
 }

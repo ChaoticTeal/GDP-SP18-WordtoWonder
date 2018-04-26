@@ -186,7 +186,7 @@ public class InventoryMenu : MonoBehaviour
                 activeNPC.PuzzleSolved = 1;
             HideMenu();
             activeNPC.Interact();
-            UpdatePlayer();
+            player.CanControl = false;
             PlayerInventory.Remove(activeText);
         }
         else

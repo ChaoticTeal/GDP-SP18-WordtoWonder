@@ -118,16 +118,12 @@ public class NPCInteraction : MonoBehaviour
 	void Start () 
 	{
         camera = FindObjectOfType<Camera>();
+        if (puzzleText.BaseText == "")
+            puzzleText = null;
         if (dialogueText_Problem == "")
             PuzzleSolved = 1;
         else
             PuzzleSolved = 0;
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
 	}
 
     /// <summary>
@@ -143,13 +139,13 @@ public class NPCInteraction : MonoBehaviour
             // Instantiate the dialogue box
             ActiveDialogueBox = Instantiate(dialogueBox, canvas.transform);
             // Set the text
-            dialogueBox.GetComponentInChildren<Text>().text = DialogueText;
+            ActiveDialogueBox.GetComponentInChildren<Text>().text = DialogueText;
             // If the NPC is on the bottom half of the screen, put the box on the top
             if (screenPosition.y < camera.pixelHeight / 2)
-                dialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
+                ActiveDialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
             // Otherwise, put it on the bottom
             else
-                dialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
+                ActiveDialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
         }
         // If there is a dialogue box, get rid of it
         else
