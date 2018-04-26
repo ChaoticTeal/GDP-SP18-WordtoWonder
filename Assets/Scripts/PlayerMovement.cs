@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Does the player have control?
     /// </summary>
-    bool canControl;
+    bool canControl_UseProperty;
     /// <summary>
     /// Is the player on the ground?
     /// </summary>
@@ -92,13 +92,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     Transform interactPoint;
 
+    public bool CanControl
+    {
+        get { return canControl_UseProperty; }
+        set { canControl_UseProperty = value; }
+    }
+
     // Use this for initialization
     void Start ()
     {
         jumpForce = new Vector2(0, jumpStrength);
         rigidbody2D = GetComponent<Rigidbody2D>();
         boxCol = GetComponent<BoxCollider2D>();
-        canControl = true;
+        CanControl = true;
     }
 	
 	// Update is called once per frame
@@ -109,13 +115,13 @@ public class PlayerMovement : MonoBehaviour
         GetInteractInput();
         UpdateIsOnGround();
         Interact();
-        if (!canControl)
+        if (!CanControl)
             GetText();
     }
 
     private void FixedUpdate()
     {
-        if (canControl)
+        if (CanControl)
         {
             Move();
             Jump();
@@ -161,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
                     if (c.gameObject.GetComponent<NPCInteraction>() != null)
                     {
                         c.gameObject.GetComponent<NPCInteraction>().Interact();
-                        canControl = !canControl;
+                        CanControl = !CanControl;
                     }
                 }
         }

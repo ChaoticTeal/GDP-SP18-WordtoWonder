@@ -24,13 +24,19 @@ public class NPCInteraction : MonoBehaviour
     [Header("Puzzle elements")]
     [Tooltip("Type of word which works as a solution.\n0 for food.")]
     [SerializeField]
-    int solutionType;
+    int solutionType_UseProperty;
     [Tooltip("Index of 'best' solution with a unique response/reward.")]
     [SerializeField]
-    int bestSolutionIndex;
+    int bestSolutionIndex_UseProperty;
     [Tooltip("Problem text.")]
     [SerializeField]
     string dialogueText_Problem;
+    [Tooltip("Best solution text.")]
+    [SerializeField]
+    string dialogueText_BestSolution;
+    [Tooltip("Problem solved text.")]
+    [SerializeField]
+    string dialogueText_ProblemSolved;
 
 
     // Private fields
@@ -67,8 +73,20 @@ public class NPCInteraction : MonoBehaviour
     {
         get
         {
-            if (dialogueText_Problem != "") //&& !PuzzleSolved)
-                return dialogueText_Problem;
+            if (dialogueText_Problem != "")
+            {
+                switch(PuzzleSolved)
+                {
+                    case 0:
+                        return dialogueText_Problem;
+                    case 1:
+                        return dialogueText_ProblemSolved;
+                    case 2:
+                        return dialogueText_BestSolution;
+                    default:
+                        return dialogueText_Problem;
+                }
+            }
             else if (puzzleText.BaseText != "" && !TextCollected)
                 return string.Format(dialogueText_Puzzle, puzzleText.DisplayText);
             else
@@ -78,21 +96,32 @@ public class NPCInteraction : MonoBehaviour
     /// <summary>
     /// Is there an unsolved puzzle?
     /// </summary>
-    /*
-    public bool PuzzleSolved
+    public int PuzzleSolved { get; set; }
+    /// <summary>
+    /// Solution type
+    /// </summary>
+    public int SolutionType
     {
-        get
-        {
-            if(dialogueText_Problem != "")
-                return 
-        }
-    }*/
+        get { return solutionType_UseProperty; }
+    }
+
+    /// <summary>
+    /// Best solution index
+    /// </summary>
+    public int SolutionIndex
+    {
+        get { return bestSolutionIndex_UseProperty; }
+    }
 
 
 	// Use this for initialization
 	void Start () 
 	{
         camera = FindObjectOfType<Camera>();
+        if (dialogueText_Problem == "")
+            PuzzleSolved = 1;
+        else
+            PuzzleSolved = 0;
 	}
 	
 	// Update is called once per frame

@@ -18,6 +18,29 @@ public class InventoryMenu : MonoBehaviour
     [SerializeField]
     Text descriptionAreaText;
 
+    [SerializeField]
+    Transform npcRange;
+    /// <summary>
+    /// Interactive layer
+    /// </summary>
+    [Tooltip("Interactive layer.")]
+    [SerializeField]
+    LayerMask interactible;
+    /// <summary>
+    /// Radius of interaction
+    /// </summary>
+    [Tooltip("Radius of interaction.")]
+    [SerializeField]
+    float interactionRangeRadius = .5f;
+    [SerializeField]
+    GameObject useButton;
+    [SerializeField]
+    PlayerMovement player;
+
+    PuzzleText activeText;
+
+    NPCInteraction activeNPC;
+    bool checkPuzzle;
     private List<GameObject> menuItems;
     private string defaultDescriptionText;
 
@@ -30,8 +53,9 @@ public class InventoryMenu : MonoBehaviour
         get { return inventoryMenuPanel.activeSelf; }
     }
 
-    public void UpdateDescriptionAreaText(string descriptionText)
+    public void UpdateDescriptionAreaText(string descriptionText, IInventoryText objectRepresented)
     {
+        activeText = objectRepresented as PuzzleText;
         descriptionAreaText.text = descriptionText;
     }
 
@@ -55,13 +79,31 @@ public class InventoryMenu : MonoBehaviour
             HideMenu();
         // It seems if you don't do this every frame, the cursor is not locked properly...
         UpdateCursor();
+        Interact();
+    }
+
+    // Interact
+    void Interact()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(npcRange.position, interactionRangeRadius, interactible);
+        if (colliders.Length > 0)
+            foreach (Collider2D c in colliders)
+            {
+                if (c.gameObject.GetComponent<NPCInteraction>() != null)
+                {
+                    activeNPC = c.GetComponent<NPCInteraction>();
+                    if (activeNPC.PuzzleSolved == 0)
+                        checkPuzzle = true;
+                    else
+                        checkPuzzle = false;
+                }
+            }
     }
 
     private void HandleInput()
     {
         if (Input.GetButtonDown("Cancel") && canPause)
         {
-            Debug.Log("Pause");
             if (IsVisible)
             {
                 HideMenu();
@@ -69,16 +111,17 @@ public class InventoryMenu : MonoBehaviour
             else
             {
                 ShowMenu();
-            }            
-            UpdateFirstPersonController();
+            }
+            UpdatePlayer();
         }
     }
 
     private void ShowMenu()
     {
-        UpdateDescriptionAreaText(defaultDescriptionText);
+        UpdateDescriptionAreaText(defaultDescriptionText, null);
         GenerateMenuItems();
         inventoryMenuPanel.SetActive(true);
+        useButton.SetActive(checkPuzzle);
     }
 
     private void GenerateMenuItems()
@@ -100,9 +143,9 @@ public class InventoryMenu : MonoBehaviour
         }
     }
 
-    private void UpdateFirstPersonController()
+    private void UpdatePlayer()
     {
-
+        player.CanControl = !IsVisible;
     }
 
     private void HideMenu()
@@ -131,5 +174,22 @@ public class InventoryMenu : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
+    }
+
+    public void UseButton()
+    {
+        if (activeText.TextType == activeNPC.SolutionType)
+        {
+            if (activeText.TextIndex == activeNPC.SolutionType)
+                activeNPC.PuzzleSolved = 2;
+            else
+                activeNPC.PuzzleSolved = 1;
+            HideMenu();
+            activeNPC.Interact();
+            UpdatePlayer();
+            PlayerInventory.Remove(activeText);
+        }
+        else
+            descriptionAreaText.text = "That doesn't seem right.";
     }
 }

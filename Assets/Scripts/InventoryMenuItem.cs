@@ -18,7 +18,7 @@ public class InventoryMenuItem : MonoBehaviour
     public void OnValueChanged()
     {
         // Update the description area text!
-        inventoryMenu.UpdateDescriptionAreaText(InventoryObjectRepresented.BaseText);
+        inventoryMenu.UpdateDescriptionAreaText(InventoryObjectRepresented.BaseText, InventoryObjectRepresented);
         if(audioSource != null)
             audioSource.Play();
     }

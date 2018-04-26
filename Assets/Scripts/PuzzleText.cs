@@ -9,10 +9,10 @@ public class PuzzleText : IInventoryText
     // SerializeFields
     [Tooltip("Index of the text within its category.")]
     [SerializeField]
-    int textIndex;
+    int textIndex_UseProperty;
     [Tooltip("Category of the text.\n0 for food.")]
     [SerializeField]
-    int textType;
+    int textType_UseProperty;
     [Tooltip("The actual text value.")]
     [SerializeField]
     string baseText_UseProperty;
@@ -24,6 +24,22 @@ public class PuzzleText : IInventoryText
         get
         {
             return "<color=#" + ColorUtility.ToHtmlStringRGB(TextColor) + ">" + BaseText + "</color>";
+        }
+    }
+
+    public int TextIndex
+    {
+        get
+        {
+            return textIndex_UseProperty;
+        }
+    }
+
+    public int TextType
+    {
+        get
+        {
+            return textType_UseProperty;
         }
     }
 
