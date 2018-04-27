@@ -54,6 +54,9 @@ public class InventoryMenu : MonoBehaviour
     [Tooltip("Description of each ability.")]
     [SerializeField]
     List<string> abilityDescriptions;
+    [Tooltip("Word collect popup.")]
+    [SerializeField]
+    GameObject announcementBox;
 
     PuzzleText activeText;
 
@@ -260,6 +263,7 @@ public class InventoryMenu : MonoBehaviour
 
     public void AddAbilityText(AbilityText abilityText)
     {
+        GameObject popup = Instantiate(announcementBox, gameObject.GetComponentInParent<Transform>());
         int newType = abilityText.TextType;
         int totalOfType = 0;
         bool abilityUpdated = false;
@@ -269,19 +273,20 @@ public class InventoryMenu : MonoBehaviour
             if (a.TextType == newType)
                 totalOfType++;
         }
-        if(totalOfType >= abilityTotals[newType])
+        if (totalOfType >= abilityTotals[newType])
         {
             if (UnlockAbility != null)
                 UnlockAbility.Invoke(newType);
-            for(int i = 0; i < AbilityInventory.Count; i++)
+            for (int i = 0; i < AbilityInventory.Count; i++)
             {
-                if(AbilityInventory[i].TextType == newType)
+                if (AbilityInventory[i].TextType == newType)
                 {
                     if (!abilityUpdated)
                     {
                         AbilityInventory[i].BaseText = abilityNames[newType];
                         AbilityInventory[i].DescriptionText = abilityDescriptions[newType];
                         abilityUpdated = true;
+                        popup.GetComponentInChildren<Text>().text = "You have unlocked " + AbilityInventory[i].DisplayText;
                     }
                     else
                     {
@@ -292,28 +297,40 @@ public class InventoryMenu : MonoBehaviour
                 }
             }
         }
+        else
+            popup.GetComponentInChildren<Text>().text = "You got " + abilityText.DisplayText;
+    }
+
+    public void AddInventoryText(IInventoryText inventoryText)
+    {
+        PlayerInventory.Add(inventoryText);
+        GameObject popup = Instantiate(announcementBox, gameObject.GetComponentInParent<Transform>());
+        popup.GetComponentInChildren<Text>().text = "You got " + inventoryText.DisplayText;
     }
 
     public void UseButton()
     {
-        if (activeText.TextType == activeNPC.SolutionType)
+        if (activeText != null)
         {
-            if (activeText.TextIndex == activeNPC.SolutionIndex)
-                activeNPC.PuzzleSolved = 2;
-            else
-                activeNPC.PuzzleSolved = 1;
-            HideMenu();
-            activeNPC.Interact();
-            if(activeNPC.abilityReward != null)
+            if (activeText.TextType == activeNPC.SolutionType)
             {
-                activeNPC.abilityReward.TextEffect();
-                AddAbilityText(activeNPC.abilityReward);
+                if (activeText.TextIndex == activeNPC.SolutionIndex)
+                    activeNPC.PuzzleSolved = 2;
+                else
+                    activeNPC.PuzzleSolved = 1;
+                HideMenu();
+                activeNPC.Interact();
+                if (activeNPC.abilityReward != null)
+                {
+                    activeNPC.abilityReward.TextEffect();
+                    AddAbilityText(activeNPC.abilityReward);
+                }
+                player.CanControl = false;
+                PlayerInventory.Remove(activeText);
             }
-            player.CanControl = false;
-            PlayerInventory.Remove(activeText);
+            else
+                descriptionAreaText.text = "That doesn't seem right.";
         }
-        else
-            descriptionAreaText.text = "That doesn't seem right.";
     }
 
     public void SwitchPanels(int type)

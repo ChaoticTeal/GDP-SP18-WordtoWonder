@@ -168,7 +168,7 @@ public class PlayerMovement : MonoBehaviour
                         if(!c.gameObject.GetComponent<NPCInteraction>().TextCollected)
                         {
                             c.gameObject.GetComponent<NPCInteraction>().puzzleText.TextEffect();
-                            inventoryMenu.PlayerInventory.Add(c.gameObject.GetComponent<NPCInteraction>().puzzleText);
+                            inventoryMenu.AddInventoryText(c.gameObject.GetComponent<NPCInteraction>().puzzleText);
                         }
                     }
                 }
