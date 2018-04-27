@@ -9,34 +9,38 @@ public class NPCInteraction : MonoBehaviour
     [Tooltip("What the NPC says without highlighted text.")]
     [SerializeField]
     string dialogueText_NoPuzzle;
-    [Tooltip("What the NPC says with highlighted text.")]
-    [SerializeField]
-    string dialogueText_Puzzle;
     [Tooltip("Dialogue box prefab.")]
     [SerializeField]
     GameObject dialogueBox;
     [Tooltip("UI canvas.")]
     [SerializeField]
     Canvas canvas;
-    [Tooltip("The puzzle-type text, if present.")]
-    [SerializeField]
-    public PuzzleText puzzleText;
+
     [Header("Puzzle elements")]
+    [Tooltip("Ability fragment given as a reward (if any.)")]
+    [SerializeField]
+    public AbilityText abilityReward;
     [Tooltip("Type of word which works as a solution.\n0 for food.")]
     [SerializeField]
     int solutionType_UseProperty;
     [Tooltip("Index of 'best' solution with a unique response/reward.")]
     [SerializeField]
     int bestSolutionIndex_UseProperty;
-    [Tooltip("Problem text.")]
+    [Tooltip("The puzzle-type text, if present.")]
     [SerializeField]
-    string dialogueText_Problem;
+    public PuzzleText puzzleText;
     [Tooltip("Best solution text.")]
     [SerializeField]
     string dialogueText_BestSolution;
+    [Tooltip("Problem text.")]
+    [SerializeField]
+    string dialogueText_Problem;
     [Tooltip("Problem solved text.")]
     [SerializeField]
     string dialogueText_ProblemSolved;
+    [Tooltip("What the NPC says with highlighted text.")]
+    [SerializeField]
+    string dialogueText_Puzzle;
 
 
     // Private fields
@@ -120,6 +124,8 @@ public class NPCInteraction : MonoBehaviour
         camera = FindObjectOfType<Camera>();
         if (puzzleText.BaseText == "")
             puzzleText = null;
+        if (abilityReward.BaseText == "")
+            abilityReward = null;
         if (dialogueText_Problem == "")
             PuzzleSolved = 1;
         else

@@ -144,6 +144,16 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        InventoryMenu.UnlockAbility += UnlockAbilities;
+    }
+
+    private void OnDisable()
+    {
+        InventoryMenu.UnlockAbility -= UnlockAbilities;
+    }
+
     // Get text if it's available
     private void GetText()
     {
@@ -169,7 +179,6 @@ public class PlayerMovement : MonoBehaviour
     private void GetInteractInput()
     {
         shouldInteract = Input.GetButtonDown("Interact");
-        Debug.Log("Should interact: " + shouldInteract);
     }
 
     // Interact
@@ -177,7 +186,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if(shouldInteract)
         {
-            Debug.Log("Interact");
             Collider2D[] colliders = Physics2D.OverlapCircleAll(interactPoint.position, interactionRangeRadius, interactible);
             if (colliders.Length > 0)
                 foreach (Collider2D c in colliders)
@@ -211,7 +219,7 @@ public class PlayerMovement : MonoBehaviour
                 isOnGround = false;
                 shouldJump = false;
             }
-            else //if(canGlide)
+            else if(canGlide)
             {
                 if (rigidbody2D.gravityScale > glideGravity)
                 {
@@ -246,5 +254,15 @@ public class PlayerMovement : MonoBehaviour
         if (isOnGround)
             rigidbody2D.gravityScale = baseGravityScale;
         boxCol.enabled = true;
+    }
+
+    void UnlockAbilities(int ability)
+    {
+        switch(ability)
+        {
+            case 0:
+                canGlide = true;
+                break;
+        }
     }
 }

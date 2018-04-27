@@ -18,12 +18,15 @@ public class InventoryMenuItem : MonoBehaviour
     public void OnValueChanged()
     {
         string descriptionText;
-        if (typeof(IInventoryText) == typeof(PuzzleText))
+        if (InventoryObjectRepresented is PuzzleText)
             descriptionText = ((PuzzleText)InventoryObjectRepresented).DescriptionText;
+        else if (InventoryObjectRepresented is AbilityText)
+            descriptionText = ((AbilityText)InventoryObjectRepresented).DescriptionText;
         else
             descriptionText = InventoryObjectRepresented.BaseText;
         // Update the description area text!
-        inventoryMenu.UpdateDescriptionAreaText(descriptionText, InventoryObjectRepresented);
+        
+        inventoryMenu.UpdateDescriptionAreaText(descriptionText, InventoryObjectRepresented, inventoryMenu.ActiveMenu);
         if(audioSource != null)
             audioSource.Play();
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class AbilityText : IInventoryText
 {
     // SerializeFields
@@ -14,12 +15,27 @@ public class AbilityText : IInventoryText
     [Tooltip("The actual text value.")]
     [SerializeField]
     string baseText_UseProperty;
+    [Tooltip("Description text.")]
+    [SerializeField]
+    string descriptionText_UseProperty;
 
     public string DisplayText
     {
         get
         {
             return "<color=#" + ColorUtility.ToHtmlStringRGB(TextColor) + ">" + BaseText + "</color>";
+        }
+    }
+
+    public string DescriptionText
+    {
+        get
+        {
+            return descriptionText_UseProperty;
+        }
+        set
+        {
+            descriptionText_UseProperty = value;
         }
     }
 
@@ -52,6 +68,10 @@ public class AbilityText : IInventoryText
         get
         {
             return baseText_UseProperty;
+        }
+        set
+        {
+            baseText_UseProperty = value;
         }
     }
 
