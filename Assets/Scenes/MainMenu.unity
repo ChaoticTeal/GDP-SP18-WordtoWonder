@@ -1700,9 +1700,11 @@ MonoBehaviour:
     m_LineSpacing: 2
   m_Text: 'A/D to move
 
-    Space to jump and get colored text
+    Space to jump
 
     Ctrl to interact
+
+    Space to get colored text
 
     Esc to pause'
 --- !u!222 &2054836045
