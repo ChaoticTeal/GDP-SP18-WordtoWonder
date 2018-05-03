@@ -45,6 +45,10 @@ public class NPCInteraction : MonoBehaviour
 
     // Private fields
     /// <summary>
+    /// Is the dialogue box active?
+    /// </summary>
+    bool dialogueActive_UseProperty;
+    /// <summary>
     /// The active camera
     /// </summary>
     Camera camera;
@@ -57,7 +61,7 @@ public class NPCInteraction : MonoBehaviour
     /// <summary>
     /// Active dialogue box
     /// </summary>
-    public GameObject ActiveDialogueBox { get; private set; }
+    GameObject ActiveDialogueBox;
     /// <summary>
     /// Is there unobtained text?
     /// </summary>
@@ -117,6 +121,18 @@ public class NPCInteraction : MonoBehaviour
         get { return bestSolutionIndex_UseProperty; }
     }
 
+    public bool DialogueActive
+    {
+        get
+        {
+            return dialogueActive_UseProperty;
+        }
+        set
+        {
+            dialogueActive_UseProperty = value;
+        }
+    }
+
 
 	// Use this for initialization
 	void Start () 
@@ -140,6 +156,7 @@ public class NPCInteraction : MonoBehaviour
         // If there isn't a dialogue box, make one
         if (ActiveDialogueBox == null)
         {
+            DialogueActive = true;
             // Get position on screen to determine position of box
             screenPosition = camera.WorldToScreenPoint(transform.position);
             // Instantiate the dialogue box
@@ -148,13 +165,18 @@ public class NPCInteraction : MonoBehaviour
             ActiveDialogueBox.GetComponentInChildren<Text>().text = DialogueText;
             // If the NPC is on the bottom half of the screen, put the box on the top
             if (screenPosition.y < camera.pixelHeight / 2)
-                ActiveDialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
+                ActiveDialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(
+                    RectTransform.Edge.Top, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
             // Otherwise, put it on the bottom
             else
-                ActiveDialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
+                ActiveDialogueBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(
+                    RectTransform.Edge.Bottom, 25f, dialogueBox.GetComponent<RectTransform>().sizeDelta.y);
         }
         // If there is a dialogue box, get rid of it
         else
+        {
             Destroy(ActiveDialogueBox);
+            DialogueActive = false;
+        }
     }
 }

@@ -65,7 +65,19 @@ public class InventoryMenu : MonoBehaviour
     private List<GameObject> menuItems;
     private string defaultDescriptionText;
 
-    public bool canPause = true;
+    bool canPause_UseProperty = true;
+
+    public bool CanPause
+    {
+        get
+        {
+            return canPause_UseProperty;
+        }
+        set
+        {
+            canPause_UseProperty = value;
+        }
+    }
 
     public static event Action<int> UnlockAbility;
 
@@ -120,16 +132,13 @@ public class InventoryMenu : MonoBehaviour
         AbilityInventory = new List<AbilityText>();
         menuItems = new List<GameObject>();
         HideMenu();
-        UpdateCursor();
     }
     // Update is called once per frame
     void Update () 
 	{
         HandleInput();
-        if (!canPause)
+        if (!canPause_UseProperty)
             HideMenu();
-        // It seems if you don't do this every frame, the cursor is not locked properly...
-        UpdateCursor();
         Interact();
     }
 
@@ -153,7 +162,7 @@ public class InventoryMenu : MonoBehaviour
 
     private void HandleInput()
     {
-        if (Input.GetButtonDown("Cancel") && canPause)
+        if (Input.GetButtonDown("Cancel") && CanPause)
         {
             if (IsVisible)
             {
@@ -244,20 +253,6 @@ public class InventoryMenu : MonoBehaviour
         foreach (var item in menuItems)
         {
             Destroy(item);
-        }
-    }
-
-    private void UpdateCursor()
-    {
-        if (IsVisible)
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 

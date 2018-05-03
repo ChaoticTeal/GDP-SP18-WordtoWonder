@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: d872112cee8cfb341a2079eef2a9b6e7
-timeCreated: 1524766209
+guid: 0ff3250d8c08c8042a2c1841cc1b4ca5
+timeCreated: 1525378093
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Wonder_6fwalk_0
-    21300002: Wonder_6fwalk_1
-    21300004: Wonder_6fwalk_2
-    21300006: Wonder_6fwalk_3
-    21300008: Wonder_6fwalk_4
-    21300010: Wonder_6fwalk_5
+    21300000: Wonder_6fwalk 1_0
+    21300002: Wonder_6fwalk 1_1
+    21300004: Wonder_6fwalk 1_2
+    21300006: Wonder_6fwalk 1_3
+    21300008: Wonder_6fwalk 1_4
+    21300010: Wonder_6fwalk 1_5
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -66,7 +66,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -76,7 +76,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -86,7 +86,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -96,7 +96,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -106,7 +106,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -116,7 +116,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -126,7 +126,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Wonder_6fwalk_0
+      name: Wonder_6fwalk 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -140,7 +140,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Wonder_6fwalk_1
+      name: Wonder_6fwalk 1_1
       rect:
         serializedVersion: 2
         x: 30
@@ -154,7 +154,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Wonder_6fwalk_2
+      name: Wonder_6fwalk 1_2
       rect:
         serializedVersion: 2
         x: 60
@@ -168,7 +168,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Wonder_6fwalk_3
+      name: Wonder_6fwalk 1_3
       rect:
         serializedVersion: 2
         x: 90
@@ -182,7 +182,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Wonder_6fwalk_4
+      name: Wonder_6fwalk 1_4
       rect:
         serializedVersion: 2
         x: 120
@@ -196,7 +196,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Wonder_6fwalk_5
+      name: Wonder_6fwalk 1_5
       rect:
         serializedVersion: 2
         x: 150

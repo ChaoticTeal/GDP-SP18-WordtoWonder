@@ -1662,7 +1662,6 @@ MonoBehaviour:
   - You can glide by pressing Jump in midair. Press Jump again to cancel.
   announcementBox: {fileID: 1013175364315256, guid: 0672cc62e5a524d4abf2b0044deb645c,
     type: 2}
-  canPause: 1
 --- !u!1 &802387596
 GameObject:
   m_ObjectHideFlags: 0

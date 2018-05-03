@@ -19,6 +19,10 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     bool canGlide;
     /// <summary>
+    /// Is the player facing right?
+    /// </summary>
+    bool isFacingRight = true;
+    /// <summary>
     /// Is the player on the ground?
     /// </summary>
     bool isOnGround;
@@ -42,6 +46,10 @@ public class PlayerMovement : MonoBehaviour
     /// Rigidbody 2D
     /// </summary>
     Rigidbody2D rigidbody2D;
+    /// <summary>
+    /// Sprite Renderer
+    /// </summary>
+    SpriteRenderer spriteRenderer;
     /// <summary>
     /// Force added on jump
     /// </summary>
@@ -121,6 +129,7 @@ public class PlayerMovement : MonoBehaviour
         boxCol = GetComponent<BoxCollider2D>();
         CanControl = true;
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 	
 	// Update is called once per frame
@@ -141,6 +150,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Move();
             Jump();
+            
+            PassVSpeed();
         }
     }
 
@@ -159,6 +170,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(shouldJump)
         {
+            shouldJump = false;
             Collider2D[] colliders = Physics2D.OverlapCircleAll(interactPoint.position, interactionRangeRadius, interactible);
             if (colliders.Length > 0)
                 foreach (Collider2D c in colliders)
@@ -193,7 +205,8 @@ public class PlayerMovement : MonoBehaviour
                     if (c.gameObject.GetComponent<NPCInteraction>() != null)
                     {
                         c.gameObject.GetComponent<NPCInteraction>().Interact();
-                        CanControl = !CanControl;
+                        CanControl = !c.gameObject.GetComponent<NPCInteraction>().DialogueActive;
+                        inventoryMenu.CanPause = CanControl;
                     }
                 }
         }
@@ -204,33 +217,50 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetButtonDown("Jump"))
             shouldJump = true;
-        else
-            shouldJump = false;
+        //else
+        //    shouldJump = false;
     }
 
     // Player jump logic
     private void Jump()
     {
+        
         if (shouldJump)
         {
+            shouldJump = false;
             if (isOnGround)
             {
                 rigidbody2D.AddForce(jumpForce, ForceMode2D.Impulse);
+
                 isOnGround = false;
-                shouldJump = false;
+                animator.SetBool("Ground", false);
             }
-            else if(canGlide)
+            else if (canGlide)
             {
                 if (rigidbody2D.gravityScale > glideGravity)
                 {
                     rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
                     rigidbody2D.gravityScale = glideGravity;
+                    animator.SetBool("gliding", true);
                 }
                 else
+                {
                     rigidbody2D.gravityScale = baseGravityScale;
-
+                    animator.SetBool("gliding", false);
+                }
             }
         }
+    }
+
+    private void PassVSpeed()
+    {
+        animator.SetFloat("vSpeed", rigidbody2D.velocity.y);
+    }
+
+    void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        spriteRenderer.flipX = !spriteRenderer.flipX;
     }
 
     // Check movement input
@@ -243,6 +273,10 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         rigidbody2D.velocity = new Vector2(horizontalInput * moveSpeed, rigidbody2D.velocity.y);
+        if (horizontalInput > 0 && !isFacingRight)
+            Flip();
+        else if (horizontalInput < 0 && isFacingRight)
+            Flip();
         animator.SetFloat("speed", Mathf.Abs(horizontalInput));
     }
 
@@ -251,8 +285,17 @@ public class PlayerMovement : MonoBehaviour
     {
         Collider2D[] groundObjects = Physics2D.OverlapCircleAll(groundDetectPoint.position, groundDetectRadius, whatCountsAsGround);
         isOnGround = groundObjects.Length > 0;
+        animator.SetBool("Ground", isOnGround);
         if (isOnGround)
+        {
+            animator.SetBool("Ground", true);
             rigidbody2D.gravityScale = baseGravityScale;
+            animator.SetBool("gliding", false);
+        }
+        if (rigidbody2D.velocity.y < 0)
+        {
+            animator.SetBool("Ground", false);
+        }
         boxCol.enabled = true;
     }
 
