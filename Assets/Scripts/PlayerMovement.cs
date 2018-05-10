@@ -139,9 +139,7 @@ public class PlayerMovement : MonoBehaviour
         GetMoveInput();
         GetInteractInput();
         UpdateIsOnGround();
-        Interact();
-        if (!CanControl)
-            GetText();
+        
     }
 
     private void FixedUpdate()
@@ -152,7 +150,12 @@ public class PlayerMovement : MonoBehaviour
             Jump();
             
             PassVSpeed();
+            
+        
         }
+        Interact();
+        if (!CanControl)
+            GetText();
     }
 
     private void OnEnable()
